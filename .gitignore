@@ -1,0 +1,19 @@
+# Local secrets and environment overrides
+.env
+*.local.env
+*.secret.*
+
+# Generated reports
+artifacts/
+reports/
+
+# IDE and OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.bak
+*.log
