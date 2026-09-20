@@ -111,3 +111,4 @@ if ($failures.Count -gt 0) {
 }
 
 Write-Host "Validated $($contracts.Count) contract schema(s), examples and compatibility matrix."
+exit 0
