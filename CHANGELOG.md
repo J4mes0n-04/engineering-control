@@ -1,6 +1,6 @@
 # История изменений
 
-## 1.0.0-rc.1 — Unreleased
+## 1.0.0-rc.1 — 2026-09-20
 
 - Подготовлен staging snapshot нормативной основы PDE.
 - Добавлена Pack Schema и общие contract templates.
@@ -8,4 +8,4 @@
 - Добавлены матрица совместимости, примеры и локальные validators.
 - Добавлены GitHub Actions, CODEOWNERS и change control для Pull Request.
 
-Версия остаётся release candidate до успешного CI, review и отдельного решения о публикации prerelease.
+Версия опубликована как предварительный release candidate для подключения сред в shadow mode. Репозиторий остаётся `staging`, `authoritative: false`, а контракты — `draft` до успешного сквозного пилота и отдельного решения о production cutover.

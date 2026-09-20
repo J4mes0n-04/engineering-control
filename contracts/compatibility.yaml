@@ -1,7 +1,7 @@
 schema_version: 1
 status: draft
 control_repository_status: staging
-control_version: 0.1.0-staging
+control_version: 1.0.0-rc.1
 
 contracts:
   pde_to_ase:
