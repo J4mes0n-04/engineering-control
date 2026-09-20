@@ -1,8 +1,8 @@
 # engineering-control
 
-Общая нормативная основа engineering control.
+Защищённая общая нормативная основа для сред PDE, ASE и QSRE.
 
-Репозиторий синхронизирован с https://github.com/J4mes0n-04/engineering-control.git.
+Репозиторий синхронизирован с https://github.com/J4mes0n-04/engineering-control.git. Он не содержит рабочие проекты, Pack конкретных Outcomes, код продуктов или локальное состояние OpenSpace.
 
 ## Статус
 
@@ -10,7 +10,7 @@
 | --- | --- |
 | `status` | `staging` |
 | `authoritative` | `false` |
-| Источник истины | `governance/` в репозитории PDE (`PDE_ENVIRONMENT`) |
+| Источник истины | `governance/` в репозитории PDE (`pde-environment`) |
 
 Пока snapshot не утверждён, нормы PDE не заменяются этой копией. Происхождение зафиксировано в `source-baseline.yaml`.
 
@@ -27,6 +27,25 @@
 - `templates/decision-log.md`
 - `templates/outcome-check.md`
 - `templates/release-plan.md`
+- `integrations/redmine/field-mapping.yaml` — reference dependency нормативного Redmine workflow
 - `.editorconfig`
 
 PDE-specific templates (`pack-mini.md`, `pack-full.md`, `pack.json`, `redmine-outcome.md`) не переносились.
+
+## Что намеренно отсутствует
+
+- `workspaces/` и конкретные Outcomes;
+- PDE-specific agent rules и skills;
+- локальные конфигурации Cursor, Codex и OpenSpace;
+- готовые среды ASE и QSRE;
+- reusable workflows и межрепозиторная автоматизация до отдельного этапа проверки.
+
+## Правила работы
+
+1. Пока `authoritative: false`, snapshot нельзя использовать как замену действующему `governance/` PDE.
+2. Нормативные изменения проходят отдельный Pull Request и одобрение человека.
+3. OpenSpace и другие агенты не изменяют `governance/` автоматически.
+4. Среды ссылаются на утверждённую версию по tag и полному commit SHA.
+5. Переключение источника истины выполняется только после проверки совместимости и shadow-периода.
+
+Происхождение и состав копии зафиксированы в [`source-baseline.yaml`](source-baseline.yaml).
