@@ -1,0 +1,45 @@
+schema_version: 1
+status: draft
+control_repository_status: staging
+control_version: 0.1.0-staging
+
+contracts:
+  pde_to_ase:
+    version: 1.0.0
+    schema: contracts/pde-to-ase.schema.json
+    status: draft
+  ase_to_qsre:
+    version: 1.0.0
+    schema: contracts/ase-to-qsre.schema.json
+    status: draft
+  qsre_to_pde:
+    version: 1.0.0
+    schema: contracts/qsre-to-pde.schema.json
+    status: draft
+
+environment_compatibility:
+  pde_environment:
+    status: available
+    environment_version: 0.1.0-draft
+    produces:
+      pde_to_ase: 1.x
+    consumes:
+      qsre_to_pde: 1.x
+  ase_environment:
+    status: not-deployed
+    consumes:
+      pde_to_ase: 1.x
+    produces:
+      ase_to_qsre: 1.x
+  qsre_environment:
+    status: not-deployed
+    consumes:
+      ase_to_qsre: 1.x
+    produces:
+      qsre_to_pde: 1.x
+
+versioning_rules:
+  compatible_change: Добавление необязательного поля без изменения смысла существующих полей.
+  breaking_change: Удаление обязательного поля, изменение типа, enum или нормативного смысла.
+  breaking_change_action: Выпустить новую major-версию и описать период миграции.
+  pinning: Рабочая среда фиксирует release tag и полный commit SHA engineering-control.

@@ -30,6 +30,8 @@
 - `integrations/redmine/field-mapping.yaml` — reference dependency нормативного Redmine workflow
 - `.editorconfig`
 
+Дополнительно подготовлены три draft-контракта обмена в `contracts/`, нейтральные примеры, матрица совместимости и локальная проверка `scripts/validate-contracts.ps1`.
+
 PDE-specific templates (`pack-mini.md`, `pack-full.md`, `pack.json`, `redmine-outcome.md`) не переносились.
 
 ## Что намеренно отсутствует

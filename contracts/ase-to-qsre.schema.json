@@ -1,0 +1,119 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://engineering-control.local/contracts/ase-to-qsre.schema.json",
+  "title": "ASE to QSRE handoff contract v1.0.0",
+  "type": "object",
+  "required": ["schema_version", "contract_type", "contract_version", "handoff_id", "created_at", "outcome_id", "pde_handoff_id", "pack", "implementation", "coverage", "evidence_bundle", "known_limitations", "release_plan", "residual_risks", "contacts", "qsre_ack"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "contract_type": {"const": "ase-to-qsre"},
+    "contract_version": {"const": "1.0.0"},
+    "handoff_id": {"type": "string", "pattern": "^HOF-ASE-QSRE-[A-Z0-9-]+$"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "outcome_id": {"type": "string", "pattern": "^OUT-[A-Z0-9-]+$"},
+    "pde_handoff_id": {"type": "string", "pattern": "^HOF-PDE-ASE-[A-Z0-9-]+$"},
+    "pack": {"$ref": "#/definitions/versionedReference"},
+    "implementation": {
+      "type": "object", "required": ["repository", "commit_sha", "pull_requests", "summary", "delivery_slice_ids"],
+      "properties": {
+        "repository": {"type": "string", "format": "uri"},
+        "commit_sha": {"type": "string", "pattern": "^[0-9a-fA-F]{40}$"},
+        "pull_requests": {"type": "array", "minItems": 1, "items": {"type": "string", "format": "uri"}},
+        "summary": {"type": "string", "minLength": 20},
+        "delivery_slice_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^SLICE-[A-Z0-9-]+$"}}
+      },
+      "additionalProperties": false
+    },
+    "coverage": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "required": ["requirement_id", "evidence_ids", "test_references", "result"],
+        "properties": {
+          "requirement_id": {"type": "string", "pattern": "^(AC|NFR)-[0-9]{3,}$"},
+          "evidence_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^EVD-[0-9]{3,}$"}},
+          "test_references": {"type": "array", "minItems": 1, "items": {"$ref": "#/definitions/immutableReference"}},
+          "result": {"enum": ["pass", "fail", "partial", "not-run"]}
+        },
+        "additionalProperties": false
+      }
+    },
+    "evidence_bundle": {"$ref": "#/definitions/versionedReference"},
+    "known_limitations": {
+      "type": "array",
+      "items": {
+        "type": "object", "required": ["id", "description", "impact", "mitigation", "owner"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^LIM-[0-9]{3,}$"},
+          "description": {"type": "string", "minLength": 10},
+          "impact": {"type": "string", "minLength": 10},
+          "mitigation": {"type": "string", "minLength": 10},
+          "owner": {"type": "string", "minLength": 2}
+        },
+        "additionalProperties": false
+      }
+    },
+    "release_plan": {
+      "type": "object", "required": ["reference", "rollout", "stop_conditions", "rollback"],
+      "properties": {
+        "reference": {"$ref": "#/definitions/immutableReference"},
+        "rollout": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 5}},
+        "stop_conditions": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 5}},
+        "rollback": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 5}}
+      },
+      "additionalProperties": false
+    },
+    "residual_risks": {
+      "type": "array",
+      "items": {
+        "type": "object", "required": ["id", "description", "level", "accepted_by"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^RISK-[0-9]{3,}$"},
+          "description": {"type": "string", "minLength": 10},
+          "level": {"enum": ["low", "medium", "high", "critical"]},
+          "accepted_by": {"type": "string", "minLength": 2}
+        },
+        "additionalProperties": false
+      }
+    },
+    "contacts": {
+      "type": "object", "required": ["ase_owner", "evidence_owner", "release_owner", "qsre_owner"],
+      "properties": {
+        "ase_owner": {"type": "string", "minLength": 2},
+        "evidence_owner": {"type": "string", "minLength": 2},
+        "release_owner": {"type": "string", "minLength": 2},
+        "qsre_owner": {"type": "string", "minLength": 2}
+      },
+      "additionalProperties": false
+    },
+    "qsre_ack": {"$ref": "#/definitions/ack"}
+  },
+  "definitions": {
+    "immutableReference": {
+      "type": "object", "required": ["repository", "commit_sha", "path"],
+      "properties": {"repository": {"type": "string", "format": "uri"}, "commit_sha": {"type": "string", "pattern": "^[0-9a-fA-F]{40}$"}, "path": {"type": "string", "minLength": 3}},
+      "additionalProperties": false
+    },
+    "versionedReference": {
+      "type": "object", "required": ["repository", "commit_sha", "path", "version"],
+      "properties": {
+        "repository": {"type": "string", "format": "uri"},
+        "commit_sha": {"type": "string", "pattern": "^[0-9a-fA-F]{40}$"},
+        "path": {"type": "string", "minLength": 3},
+        "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"}
+      },
+      "additionalProperties": false
+    },
+    "ack": {
+      "type": "object", "required": ["status", "gaps"],
+      "properties": {
+        "status": {"enum": ["pending", "accepted", "rejected", "needs-clarification"]},
+        "accepted_by": {"type": "string", "minLength": 2},
+        "accepted_at": {"type": "string", "format": "date-time"},
+        "gaps": {"type": "array", "items": {"type": "string", "minLength": 5}}
+      },
+      "allOf": [{"if": {"properties": {"status": {"const": "accepted"}}, "required": ["status"]}, "then": {"required": ["accepted_by", "accepted_at"], "properties": {"gaps": {"maxItems": 0}}}}],
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

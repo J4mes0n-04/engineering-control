@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "contract_type": "pde-to-ase",
+  "contract_version": "1.0.0",
+  "handoff_id": "HOF-PDE-ASE-DEMO-001",
+  "created_at": "2026-09-20T09:00:00Z",
+  "outcome_id": "OUT-DEMO-001",
+  "pack": {"repository": "https://github.com/example/pde-environment", "path": "workspaces/projects/demo/outcomes/OUT-DEMO-001/pack.json", "version": "1.0.0", "commit_sha": "1111111111111111111111111111111111111111", "status": "baseline"},
+  "risk_level": "R1",
+  "autonomy_level": "A1",
+  "contacts": {"pde_owner": "Владелец PDE", "ase_owner": "Владелец ASE", "risk_owner": "Владелец риска"},
+  "delivery_slices": [{"id": "SLICE-DEMO-001", "priority": 1, "summary": "Реализовать минимальный проверяемый срез результата", "requirement_ids": ["AC-001", "NFR-001"]}],
+  "requirements": {
+    "acceptance_criteria": [{"id": "AC-001", "statement": "Пользователь получает ожидаемый результат без ручного обхода"}],
+    "nfrs": [{"id": "NFR-001", "statement": "Критическая операция завершается не дольше двух секунд"}]
+  },
+  "implementation_boundaries": {
+    "ase_may_decide": ["Выбор внутренней структуры модулей реализации"],
+    "requires_definition_change": ["Изменение Acceptance Criteria или границ Outcome"]
+  },
+  "constraints": [],
+  "decision_log": {"repository": "https://github.com/example/pde-environment", "commit_sha": "1111111111111111111111111111111111111111", "path": "workspaces/projects/demo/outcomes/OUT-DEMO-001/decision-log.md"},
+  "telemetry": {"signals": [{"name": "operation_duration", "source": "тестовый стенд", "decision_use": "Проверка выполнения NFR-001"}], "observation_window": "24 часа после выпуска"},
+  "expected_evidence": [{"requirement_ids": ["AC-001", "NFR-001"], "method": "автоматизированный тест", "environment": "test"}],
+  "rollback_expectations": {
+    "triggers": ["Рост ошибок критической операции выше согласованного порога"],
+    "actions": ["Вернуть предыдущий подтверждённый commit"],
+    "success_criteria": ["Частота ошибок вернулась к baseline"]
+  },
+  "open_questions": [],
+  "ase_ack": {"status": "accepted", "accepted_by": "Владелец ASE", "accepted_at": "2026-09-20T09:15:00Z", "questions": []}
+}
