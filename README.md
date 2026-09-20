@@ -30,6 +30,18 @@
 - `integrations/redmine/field-mapping.yaml` — reference dependency нормативного Redmine workflow
 - `.editorconfig`
 
+Дополнительно подготовлены три draft-контракта обмена в `contracts/`, нейтральные примеры, матрица совместимости и локальная проверка `scripts/validate-contracts.ps1`.
+
+## Проверка репозитория
+
+Перед Pull Request выполните:
+
+```powershell
+pwsh ./scripts/validate-control.ps1
+```
+
+GitHub Actions запускает ту же проверку для Pull Request и `main`. Изменения governance, contracts, schemas, templates, shared skills и CI требуют содержательных полей `Reason:` и `Governance impact:` в описании Pull Request.
+
 PDE-specific templates (`pack-mini.md`, `pack-full.md`, `pack.json`, `redmine-outcome.md`) не переносились.
 
 ## Что намеренно отсутствует

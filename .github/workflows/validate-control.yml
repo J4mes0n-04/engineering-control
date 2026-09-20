@@ -1,0 +1,32 @@
+name: Validate engineering control
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  control:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate repository and contracts
+        shell: pwsh
+        run: ./scripts/validate-control.ps1
+
+  change-control:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Validate change rationale
+        shell: pwsh
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: ./scripts/check-control-change.ps1 -BaseRef "origin/${{ github.base_ref }}"

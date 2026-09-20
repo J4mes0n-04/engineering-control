@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "contract_type": "ase-to-qsre",
+  "contract_version": "1.0.0",
+  "handoff_id": "HOF-ASE-QSRE-DEMO-001",
+  "created_at": "2026-09-20T12:00:00Z",
+  "outcome_id": "OUT-DEMO-001",
+  "pde_handoff_id": "HOF-PDE-ASE-DEMO-001",
+  "pack": {"repository": "https://github.com/example/pde-environment", "commit_sha": "1111111111111111111111111111111111111111", "path": "workspaces/projects/demo/outcomes/OUT-DEMO-001/pack.json", "version": "1.0.0"},
+  "implementation": {
+    "repository": "https://github.com/example/product-repository",
+    "commit_sha": "2222222222222222222222222222222222222222",
+    "pull_requests": ["https://github.com/example/product-repository/pull/1"],
+    "summary": "Реализован согласованный минимальный срез и автоматизированные проверки",
+    "delivery_slice_ids": ["SLICE-DEMO-001"]
+  },
+  "coverage": [
+    {"requirement_id": "AC-001", "evidence_ids": ["EVD-001"], "test_references": [{"repository": "https://github.com/example/product-repository", "commit_sha": "2222222222222222222222222222222222222222", "path": "tests/acceptance/demo.spec"}], "result": "pass"},
+    {"requirement_id": "NFR-001", "evidence_ids": ["EVD-002"], "test_references": [{"repository": "https://github.com/example/product-repository", "commit_sha": "2222222222222222222222222222222222222222", "path": "tests/performance/demo.spec"}], "result": "pass"}
+  ],
+  "evidence_bundle": {"repository": "https://github.com/example/product-repository", "commit_sha": "2222222222222222222222222222222222222222", "path": "evidence/OUT-DEMO-001/evidence.json", "version": "1.0.0"},
+  "known_limitations": [],
+  "release_plan": {
+    "reference": {"repository": "https://github.com/example/product-repository", "commit_sha": "2222222222222222222222222222222222222222", "path": "release/OUT-DEMO-001.md"},
+    "rollout": ["Развернуть на тестовой группе"],
+    "stop_conditions": ["Остановить при нарушении NFR-001"],
+    "rollback": ["Вернуть предыдущий подтверждённый commit"]
+  },
+  "residual_risks": [],
+  "contacts": {"ase_owner": "Владелец ASE", "evidence_owner": "Владелец доказательств", "release_owner": "Владелец выпуска", "qsre_owner": "Владелец QSRE"},
+  "qsre_ack": {"status": "accepted", "accepted_by": "Владелец QSRE", "accepted_at": "2026-09-20T12:15:00Z", "gaps": []}
+}
