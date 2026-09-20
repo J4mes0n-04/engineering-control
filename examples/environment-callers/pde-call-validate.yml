@@ -1,0 +1,15 @@
+# Скопируйте в PDE .github/workflows/ после замены PIN_SHA.
+name: Call control validate PDE
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pde:
+    uses: J4mes0n-04/engineering-control/.github/workflows/validate-pde.yml@PIN_SHA

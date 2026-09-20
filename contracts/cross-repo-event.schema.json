@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://engineering-control.local/contracts/cross-repo-event.schema.json",
+  "title": "Cross-repository notification event v1.0.0",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "contract_type",
+    "contract_version",
+    "event_type",
+    "created_at",
+    "source_repository",
+    "source_sha",
+    "target_repository",
+    "summary",
+    "requested_human_action",
+    "automation_limits"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "contract_type": { "const": "cross-repo-event" },
+    "contract_version": { "const": "1.0.0" },
+    "event_type": { "enum": ["pde-ready", "ase-evidence-ready", "qsre-feedback"] },
+    "created_at": { "type": "string", "format": "date-time" },
+    "source_repository": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$" },
+    "source_ref": { "type": "string", "minLength": 1 },
+    "source_sha": { "type": "string", "pattern": "^[0-9a-fA-F]{40}$" },
+    "target_repository": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$" },
+    "outcome_id": { "type": "string", "pattern": "^OUT-[A-Z0-9-]+$" },
+    "artifact_path": { "type": "string", "minLength": 1 },
+    "artifact_url": { "type": "string", "minLength": 8 },
+    "summary": { "type": "string", "minLength": 10 },
+    "requested_human_action": { "type": "string", "minLength": 10 },
+    "automation_limits": {
+      "type": "object",
+      "required": [
+        "may_create_issue",
+        "may_merge_pull_request",
+        "may_change_pack",
+        "may_accept_ready_decision"
+      ],
+      "properties": {
+        "may_create_issue": { "const": true },
+        "may_merge_pull_request": { "const": false },
+        "may_change_pack": { "const": false },
+        "may_accept_ready_decision": { "const": false }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

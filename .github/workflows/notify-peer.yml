@@ -1,0 +1,118 @@
+name: Notify peer environment
+
+on:
+  workflow_call:
+    inputs:
+      event_type:
+        description: Тип уведомления между средами
+        required: true
+        type: string
+      target_repository:
+        description: Целевой репозиторий в формате owner/name
+        required: true
+        type: string
+      issue_title:
+        description: Заголовок уведомления
+        required: true
+        type: string
+      issue_body:
+        description: Текст уведомления для человека
+        required: true
+        type: string
+      source_sha:
+        description: Полный commit SHA источника
+        required: true
+        type: string
+      outcome_id:
+        description: Идентификатор Outcome, если известен
+        required: false
+        type: string
+        default: ''
+      artifact_path:
+        description: Путь к handoff или feedback в исходном репозитории
+        required: false
+        type: string
+        default: ''
+    secrets:
+      notify_app_id:
+        required: true
+      notify_app_private_key:
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Reject forbidden automation
+        id: route
+        env:
+          EVENT_TYPE: ${{ inputs.event_type }}
+          TARGET_REPOSITORY: ${{ inputs.target_repository }}
+          SOURCE_SHA: ${{ inputs.source_sha }}
+        run: |
+          set -euo pipefail
+          case "$EVENT_TYPE" in
+            pde-ready|ase-evidence-ready|qsre-feedback) ;;
+            *)
+              echo "Недопустимый event_type: $EVENT_TYPE"
+              exit 1
+              ;;
+          esac
+          case "$EVENT_TYPE:$TARGET_REPOSITORY" in
+            pde-ready:J4mes0n-04/ase-environment) ;;
+            ase-evidence-ready:J4mes0n-04/qsre-environment) ;;
+            qsre-feedback:J4mes0n-04/pde-environment) ;;
+            qsre-feedback:J4mes0n-04/PDE_ENVIRONMENT) ;;
+            *)
+              echo "Маршрут $EVENT_TYPE -> $TARGET_REPOSITORY запрещён."
+              exit 1
+              ;;
+          esac
+          if ! echo "$SOURCE_SHA" | grep -Eq '^[0-9a-fA-F]{40}$'; then
+            echo "source_sha должен быть полным 40-символьным SHA."
+            exit 1
+          fi
+          echo "target_name=${TARGET_REPOSITORY##*/}" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub App token for target repository
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.notify_app_id }}
+          private-key: ${{ secrets.notify_app_private_key }}
+          owner: J4mes0n-04
+          repositories: ${{ steps.route.outputs.target_name }}
+
+      - name: Create notification issue only
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          EVENT_TYPE: ${{ inputs.event_type }}
+          TARGET_REPOSITORY: ${{ inputs.target_repository }}
+          ISSUE_TITLE: ${{ inputs.issue_title }}
+          ISSUE_BODY: ${{ inputs.issue_body }}
+          SOURCE_SHA: ${{ inputs.source_sha }}
+          SOURCE_REPOSITORY: ${{ github.repository }}
+          OUTCOME_ID: ${{ inputs.outcome_id }}
+          ARTIFACT_PATH: ${{ inputs.artifact_path }}
+        run: |
+          set -euo pipefail
+          target_repo="${TARGET_REPOSITORY#*/}"
+          {
+            echo "$ISSUE_BODY"
+            echo
+            echo "---"
+            echo
+            echo "Автоматизация создаёт только уведомление. Она не принимает Ready-решение, не меняет Pack и не объединяет Pull Request."
+            echo
+            echo "- event_type: \`$EVENT_TYPE\`"
+            echo "- source_repository: \`$SOURCE_REPOSITORY\`"
+            echo "- source_sha: \`$SOURCE_SHA\`"
+            echo "- target_repository: \`$TARGET_REPOSITORY\`"
+            if [ -n "$OUTCOME_ID" ]; then echo "- outcome_id: \`$OUTCOME_ID\`"; fi
+            if [ -n "$ARTIFACT_PATH" ]; then echo "- artifact_path: \`$ARTIFACT_PATH\`"; fi
+          } > /tmp/cross-repo-issue.md
+          gh issue create --repo "$TARGET_REPOSITORY" --title "$ISSUE_TITLE" --body-file /tmp/cross-repo-issue.md
+          echo "Issue created in $TARGET_REPOSITORY ($target_repo). No merge, Pack edit or Ready decision was attempted."

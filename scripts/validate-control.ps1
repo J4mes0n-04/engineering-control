@@ -12,7 +12,15 @@ $requiredPaths = @(
     'contracts/pde-to-ase.schema.json', 'contracts/ase-to-qsre.schema.json',
     'contracts/qsre-to-pde.schema.json', 'scripts/validate-contracts.ps1',
     '.github/CODEOWNERS', '.github/pull_request_template.md',
-    '.github/workflows/validate-control.yml'
+    '.github/workflows/validate-control.yml',
+    '.github/workflows/validate-pde.yml',
+    '.github/workflows/validate-ase.yml',
+    '.github/workflows/validate-qsre.yml',
+    '.github/workflows/notify-peer.yml',
+    'docs/reusable-workflows.md',
+    'docs/cross-repo-events.md',
+    'docs/github-app.md',
+    'contracts/cross-repo-event.schema.json'
 )
 
 foreach ($relativePath in $requiredPaths) {

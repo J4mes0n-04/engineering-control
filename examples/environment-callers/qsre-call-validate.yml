@@ -1,0 +1,15 @@
+# Скопируйте в QSRE .github/workflows/ после замены PIN_SHA.
+name: Call control validate QSRE
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  qsre:
+    uses: J4mes0n-04/engineering-control/.github/workflows/validate-qsre.yml@PIN_SHA

@@ -1,0 +1,19 @@
+name: Validate PDE environment
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  pde:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run environment doctor
+        shell: pwsh
+        run: ./scripts/doctor.ps1
+      - name: Validate PDE repository structure
+        shell: pwsh
+        run: ./scripts/validate-repository.ps1
