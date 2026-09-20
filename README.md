@@ -2,9 +2,9 @@
 
 Общая нормативная основа engineering control.
 
-Первый коммит содержит `Unit 1: Governance snapshot`: полную копию `governance/` из PDE baseline без изменения содержания.
+Репозиторий синхронизирован с https://github.com/J4mes0n-04/engineering-control.git.
 
-## Статус snapshot
+## Статус
 
 | Поле | Значение |
 | --- | --- |
@@ -14,9 +14,19 @@
 
 Пока snapshot не утверждён, нормы PDE не заменяются этой копией. Происхождение зафиксировано в `source-baseline.yaml`.
 
-## Содержимое первого переноса
+## Содержимое
 
-- `governance/**` — нормативные документы PDE, скопированные как есть
-- `source-baseline.yaml` — tag, полный commit SHA и статус snapshot
+Скопировано из PDE baseline `pde-baseline-v0.1.0` без изменения содержания:
 
-Units 2–5 в этот репозиторий ещё не переносились.
+- `governance/**` — полный нормативный контур PDE
+- `schemas/pack.schema.json` — контракт Pack
+- `templates/ase-handoff.md`
+- `templates/qsre-feedback.md`
+- `templates/evidence-bundle.md`
+- `templates/definition-change.md`
+- `templates/decision-log.md`
+- `templates/outcome-check.md`
+- `templates/release-plan.md`
+- `.editorconfig`
+
+PDE-specific templates (`pack-mini.md`, `pack-full.md`, `pack.json`, `redmine-outcome.md`) не переносились.

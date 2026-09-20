@@ -1,15 +1,27 @@
 schema_version: 1
-snapshot_unit: 1
-snapshot_name: governance-snapshot
 status: staging
 authoritative: false
 source:
   repository: https://github.com/J4mes0n-04/PDE_ENVIRONMENT.git
   tag: pde-baseline-v0.1.0
   commit: a8df54374e2b0db6c13175c7bf1b1cf073a7441a
+copied_at: "2026-09-20"
 copied_paths:
   - governance/
-copied_at: "2026-09-20"
+  - schemas/pack.schema.json
+  - templates/ase-handoff.md
+  - templates/qsre-feedback.md
+  - templates/evidence-bundle.md
+  - templates/definition-change.md
+  - templates/decision-log.md
+  - templates/outcome-check.md
+  - templates/release-plan.md
+  - .editorconfig
+excluded_pde_specific_templates:
+  - templates/pack-mini.md
+  - templates/pack-full.md
+  - templates/pack.json
+  - templates/redmine-outcome.md
 notes: >
   Snapshot copied without content changes. This copy is not the
   normative source of truth. PDE governance/ remains authoritative
