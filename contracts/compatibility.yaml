@@ -38,6 +38,22 @@ environment_compatibility:
     produces:
       qsre_to_pde: 1.x
 
+cross_repo_events:
+  version: 1.0.0
+  schema: contracts/cross-repo-event.schema.json
+  status: draft
+  automation_may:
+    - create_issue
+  automation_must_not:
+    - merge_pull_request
+    - change_pack
+    - accept_ready_decision
+  routes:
+    pde_ready: J4mes0n-04/ase-environment
+    ase_evidence_ready: J4mes0n-04/qsre-environment
+    qsre_feedback: J4mes0n-04/pde-environment
+  may_merge_pull_request: false
+
 versioning_rules:
   compatible_change: Добавление необязательного поля без изменения смысла существующих полей.
   breaking_change: Удаление обязательного поля, изменение типа, enum или нормативного смысла.

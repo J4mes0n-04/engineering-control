@@ -1,0 +1,22 @@
+name: Validate ASE environment
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  ase:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+      - name: Run environment doctor
+        shell: pwsh
+        run: ./scripts/doctor.ps1
+      - name: Validate ASE repository and control pin
+        shell: pwsh
+        run: ./scripts/validate-repository.ps1

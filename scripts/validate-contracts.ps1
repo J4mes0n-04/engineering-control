@@ -93,12 +93,56 @@ if ($loadedExamples.Count -eq $contracts.Count) {
     }
 }
 
+$eventContract = @{
+    Schema = 'cross-repo-event.schema.json'
+    Example = 'examples/cross-repo-event.example.json'
+    Type = 'cross-repo-event'
+    Version = '1.0.0'
+}
+$eventSchemaPath = Join-Path $contractsRoot $eventContract.Schema
+$eventExamplePath = Join-Path $contractsRoot $eventContract.Example
+if (-not (Test-Path -LiteralPath $eventSchemaPath)) {
+    $failures.Add("Missing schema: $($eventContract.Schema)")
+} elseif (-not (Test-Path -LiteralPath $eventExamplePath)) {
+    $failures.Add("Missing example: $($eventContract.Example)")
+} else {
+    try {
+        $eventSchema = Get-Content -Raw -LiteralPath $eventSchemaPath | ConvertFrom-Json -Depth 100
+        $eventExampleText = Get-Content -Raw -LiteralPath $eventExamplePath
+        $eventExample = $eventExampleText | ConvertFrom-Json -Depth 100
+        if (-not ($eventExampleText | Test-Json -SchemaFile $eventSchemaPath -ErrorAction Stop)) {
+            $failures.Add("Schema validation failed: $($eventContract.Example)")
+        }
+        if ($eventSchema.additionalProperties -ne $false) {
+            $failures.Add("Root additionalProperties must be false: $($eventContract.Schema)")
+        }
+        if ($eventExample.contract_type -ne $eventContract.Type) {
+            $failures.Add("Unexpected contract_type in $($eventContract.Example)")
+        }
+        if ($eventExample.contract_version -ne $eventContract.Version) {
+            $failures.Add("Unexpected contract_version in $($eventContract.Example)")
+        }
+        if ($eventExample.automation_limits.may_merge_pull_request -ne $false -or
+            $eventExample.automation_limits.may_change_pack -ne $false -or
+            $eventExample.automation_limits.may_accept_ready_decision -ne $false) {
+            $failures.Add('Cross-repo event example must forbid merge, Pack change and Ready decision')
+        }
+        $invalidEvent = $eventExampleText | ConvertFrom-Json -Depth 100
+        $invalidEvent | Add-Member -NotePropertyName 'unexpected_field' -NotePropertyValue 'must-be-rejected'
+        if (($invalidEvent | ConvertTo-Json -Depth 100) | Test-Json -SchemaFile $eventSchemaPath -ErrorAction SilentlyContinue) {
+            $failures.Add("Schema accepts an unknown root property: $($eventContract.Schema)")
+        }
+    } catch {
+        $failures.Add("Invalid schema or example for cross-repo-event: $($_.Exception.Message)")
+    }
+}
+
 $compatibilityPath = Join-Path $contractsRoot 'compatibility.yaml'
 if (-not (Test-Path -LiteralPath $compatibilityPath)) {
     $failures.Add('Missing contracts/compatibility.yaml')
 } else {
     $compatibility = Get-Content -Raw -LiteralPath $compatibilityPath
-    foreach ($requiredText in @('control_repository_status: staging', 'pde_to_ase:', 'ase_to_qsre:', 'qsre_to_pde:', 'version: 1.0.0', 'status: not-deployed')) {
+    foreach ($requiredText in @('control_repository_status: staging', 'pde_to_ase:', 'ase_to_qsre:', 'qsre_to_pde:', 'cross_repo_events:', 'version: 1.0.0', 'status: not-deployed', 'may_merge_pull_request: false')) {
         if ($compatibility -notmatch [regex]::Escape($requiredText)) {
             $failures.Add("Compatibility matrix is missing '$requiredText'")
         }

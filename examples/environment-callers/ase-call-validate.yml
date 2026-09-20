@@ -1,0 +1,15 @@
+# Скопируйте в ASE .github/workflows/ после замены PIN_SHA.
+name: Call control validate ASE
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ase:
+    uses: J4mes0n-04/engineering-control/.github/workflows/validate-ase.yml@PIN_SHA

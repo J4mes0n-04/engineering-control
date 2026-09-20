@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "contract_type": "cross-repo-event",
+  "contract_version": "1.0.0",
+  "event_type": "pde-ready",
+  "created_at": "2026-09-20T21:00:00Z",
+  "source_repository": "J4mes0n-04/pde-environment",
+  "source_ref": "refs/heads/main",
+  "source_sha": "1111111111111111111111111111111111111111",
+  "target_repository": "J4mes0n-04/ase-environment",
+  "outcome_id": "OUT-DEMO-001",
+  "artifact_path": "workspaces/projects/demo/outcomes/OUT-DEMO-001/ase-handoff.md",
+  "artifact_url": "https://github.com/J4mes0n-04/pde-environment/blob/1111111111111111111111111111111111111111/workspaces/projects/demo/outcomes/OUT-DEMO-001/ase-handoff.md",
+  "summary": "Pack готов к приёму ASE после ручной проверки Ready.",
+  "requested_human_action": "Проверить handoff, зафиксировать ACK и не начинать реализацию при блокирующих вопросах.",
+  "automation_limits": {
+    "may_create_issue": true,
+    "may_merge_pull_request": false,
+    "may_change_pack": false,
+    "may_accept_ready_decision": false
+  }
+}

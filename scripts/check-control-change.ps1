@@ -20,7 +20,7 @@ if (-not $ChangedPaths -and $LASTEXITCODE -ne 0) {
 
 $controlledPatterns = @(
     'governance/*', 'contracts/*', 'schemas/*', 'templates/*', 'shared-skills/*',
-    'scripts/*', '.github/*', 'AGENTS.md', 'source-baseline.yaml'
+    'scripts/*', '.github/*', 'docs/*', 'AGENTS.md', 'source-baseline.yaml'
 )
 $controlled = @($changed | Where-Object {
     $path = $_.Replace('\', '/')

@@ -1,0 +1,36 @@
+# Скопируйте в PDE .github/workflows/ после замены PIN_SHA.
+name: Notify ASE that PDE is Ready
+
+on:
+  workflow_dispatch:
+    inputs:
+      outcome_id:
+        description: Идентификатор Outcome
+        required: true
+        type: string
+      artifact_path:
+        description: Путь к ASE handoff
+        required: true
+        type: string
+      summary:
+        description: Краткое пояснение для ASE
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  notify:
+    uses: J4mes0n-04/engineering-control/.github/workflows/notify-peer.yml@PIN_SHA
+    with:
+      event_type: pde-ready
+      target_repository: J4mes0n-04/ase-environment
+      issue_title: "[pde-ready] ${{ inputs.outcome_id }}"
+      issue_body: ${{ inputs.summary }}
+      source_sha: ${{ github.sha }}
+      outcome_id: ${{ inputs.outcome_id }}
+      artifact_path: ${{ inputs.artifact_path }}
+    secrets:
+      notify_app_id: ${{ secrets.ASE_NOTIFY_APP_ID }}
+      notify_app_private_key: ${{ secrets.ASE_NOTIFY_APP_PRIVATE_KEY }}
