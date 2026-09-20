@@ -2,7 +2,7 @@ schema_version: 1
 status: staging
 authoritative: false
 source:
-  repository: https://github.com/J4mes0n-04/PDE_ENVIRONMENT.git
+  repository: https://github.com/J4mes0n-04/pde-environment.git
   tag: pde-baseline-v0.1.0
   commit: a8df54374e2b0db6c13175c7bf1b1cf073a7441a
 copied_at: "2026-09-20"
@@ -16,6 +16,7 @@ copied_paths:
   - templates/decision-log.md
   - templates/outcome-check.md
   - templates/release-plan.md
+  - integrations/redmine/field-mapping.yaml
   - .editorconfig
 excluded_pde_specific_templates:
   - templates/pack-mini.md
@@ -23,6 +24,7 @@ excluded_pde_specific_templates:
   - templates/pack.json
   - templates/redmine-outcome.md
 notes: >
-  Snapshot copied without content changes. This copy is not the
-  normative source of truth. PDE governance/ remains authoritative
-  until an explicit cutover decision.
+  Governance, Pack Schema and selected shared templates were copied without
+  content changes from the recorded PDE baseline. This copy is not the
+  normative source of truth. PDE governance/ remains authoritative until an
+  explicit cutover decision.
